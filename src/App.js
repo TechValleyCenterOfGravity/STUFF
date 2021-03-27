@@ -44,14 +44,15 @@ const App = () => {
             width="30"
             height="30"
             className="d-inline-block align-top"
-          />{' '}
-          Tech Valley Center of Gravity - STUFF
+          />
         </Navbar.Brand>
+        <Navbar.Brand className="d-md-none">TVCOG - STUFF</Navbar.Brand>
+        <Navbar.Brand className="d-none d-md-block">Tech Valley Center of Gravity - STUFF</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ml-auto">
             <Form inline>
-              <Form.Control type="text" placeholder="Search" className=" mr-sm-2" />
+              <Form.Control type="text" placeholder="Search" className="mr-sm-2" />
               <Button type="submit" variant="outline-primary">Search</Button>
             </Form>
           </Nav>
