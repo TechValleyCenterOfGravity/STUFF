@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import Amplify, { API, graphqlOperation } from 'aws-amplify'
-import { listItems } from './graphql/queries'
+import React, { useEffect, useState } from 'react';
 
 import './App.css';
 import './App.scss';
+import logo from './logo.svg';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -15,6 +14,8 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 
+import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import { listItems } from './graphql/queries';
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
@@ -35,14 +36,23 @@ const App = () => {
 
   return (
     <>
-      <Navbar collapseOnSelect expand="md" fixed="top" className="justify-content-between" bg="primary" variant="dark">
-        <Navbar.Brand>Tech Valley Center of Gravity STUFF</Navbar.Brand>
+      <Navbar collapseOnSelect expand="md" fixed="top" className="justify-content-between" bg="dark" variant="dark">
+        <Navbar.Brand>
+          <img
+            alt=""
+            src={logo}
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+          />{' '}
+          Tech Valley Center of Gravity - STUFF
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav class="ml-auto">
+          <Nav className="ml-auto">
             <Form inline>
               <Form.Control type="text" placeholder="Search" className=" mr-sm-2" />
-              <Button type="submit" variant="outline-light">Submit</Button>
+              <Button type="submit" variant="outline-primary">Search</Button>
             </Form>
           </Nav>
         </Navbar.Collapse>
