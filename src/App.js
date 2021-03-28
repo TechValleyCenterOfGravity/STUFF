@@ -88,7 +88,13 @@ const App = () => {
       },
       {
         Header: 'Description',
-        accessor: 'description'
+        accessor: 'description',
+        Cell: props => <ReactMarkdown>{ props.value }</ReactMarkdown>,
+      },
+      {
+        Header: 'Link',
+        accessor: 'link',
+        Cell: props => <a href={ props.value }>Link</a>,
       },
     ],
     []
