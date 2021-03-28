@@ -4,6 +4,7 @@ import './App.css';
 import './App.scss';
 import logo from './logo.svg';
 
+import { useTable } from 'react-table';
 import ReactMarkdown from 'react-markdown';
 
 import Container from 'react-bootstrap/Container';
@@ -13,7 +14,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table';
+import BTable from 'react-bootstrap/Table';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
@@ -21,7 +22,49 @@ import { listItems } from './graphql/queries';
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
+function Table({ columns, data }) {
+  // Use the state and functions returned from useTable to build your UI
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+    columns,
+    data,
+  })
+
+  return (
+    <BTable striped bordered hover {...getTableProps()}>
+      <thead>
+        {headerGroups.map(headerGroup => (
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <th {...column.getHeaderProps()}>
+                {column.render('Header')}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody {...getTableBodyProps()}>
+        {rows.map(row => {
+            prepareRow(row)
+            return (
+            <tr {...row.getRowProps()}>
+              {row.cells.map(cell => {
+                return (
+                  <td {...cell.getCellProps()}>
+                  {cell.render('Cell')}
+                  </td>
+                )
+              })}
+            </tr>
+          )
+        })}
+      </tbody>
+    </BTable>
+  )
+
+}
+
 const App = () => {
+
   const [items, setItems] = useState([])
 
   useEffect(() => {
@@ -33,8 +76,25 @@ const App = () => {
       const itemData = await API.graphql(graphqlOperation(listItems))
       const items = itemData.data.listItems.items
       setItems(items)
+      console.log(items)
     } catch (err) { console.log('error fetching items') }
   }
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Item Name',
+        accessor: 'name',
+      },
+      {
+        Header: 'Description',
+        accessor: 'description'
+      },
+    ],
+    []
+  )
+
+  const data = React.useMemo(() => items, [items])
 
   return (
     <>
@@ -76,29 +136,13 @@ const App = () => {
         </Row>
         <Row>
           <Col>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Item Name</th>
-                  <th>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  items.map((item, index) => (
-                    <tr key={item.id ? item.id : index}>
-                      <td>{item.name}</td>
-                      <td><ReactMarkdown>{item.description}</ReactMarkdown></td>
-                    </tr>
-                  ))
-                }
-              </tbody>
-            </Table>
+            <Table columns={columns} data={data} />
           </Col>
         </Row>
       </Container>
     </>
   )
+
 }
 
 export default App;
