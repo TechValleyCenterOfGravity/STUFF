@@ -4,6 +4,8 @@ import './App.css';
 import './App.scss';
 import logo from './logo.svg';
 
+import ReactMarkdown from 'react-markdown';
+
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -86,7 +88,7 @@ const App = () => {
                   items.map((item, index) => (
                     <tr key={item.id ? item.id : index}>
                       <td>{item.name}</td>
-                      <td>{item.description}</td>
+                      <td><ReactMarkdown>{item.description}</ReactMarkdown></td>
                     </tr>
                   ))
                 }
