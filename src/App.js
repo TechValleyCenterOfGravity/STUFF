@@ -96,6 +96,16 @@ const App = () => {
         accessor: 'link',
         Cell: props => <a href={ props.value }>Link</a>,
       },
+      {
+        Header: 'Locations',
+        accessor: 'Locations.items',
+        Cell: props =>
+          <ul>
+            {props.value.map((itemloc, index) => (
+              <li key={itemloc.id ? itemloc.id : index}>{itemloc.Zone.name} - {itemloc.name}</li>
+            ))}
+          </ul>
+      },
     ],
     []
   )
