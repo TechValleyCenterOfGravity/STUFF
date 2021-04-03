@@ -4,6 +4,9 @@ import './App.css';
 import './App.scss';
 import logo from './logo.svg';
 
+import AppModal from "./AppModal";
+import useModal from "./useModal"
+
 import { useTokenPagination, useTable } from 'react-table';
 import ReactMarkdown from 'react-markdown';
 
@@ -16,7 +19,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import BTable from 'react-bootstrap/Table';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import Modal from 'react-bootstrap/Modal';
 
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import { listItems } from './graphql/queries';
@@ -77,6 +79,8 @@ function Table({ columns, data }) {
 
 const App = () => {
 
+  const {isVisible, toggleModal} = useModal();
+
   const [items, setItems] = useState([])
 
   useEffect(() => {
@@ -92,17 +96,12 @@ const App = () => {
     } catch (err) { console.log('error fetching items') }
   }
 
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   const columns = React.useMemo(
     () => [
       {
         Header: 'Item Name',
         accessor: 'name',
-        Cell: props => <a href="#" onClick={handleShow}>{ props.value }</a>
+        Cell: props => <a href="#" onClick={toggleModal}>{ props.value }</a>
       },
       {
         Header: 'Description',
@@ -165,24 +164,11 @@ const App = () => {
         </Row>
         <Row>
           <Col>
-          <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Item Details</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={handleClose}>
-                Save Changes
-              </Button>
-            </Modal.Footer>
-          </Modal>
             <Table columns={columns} data={data} />
           </Col>
         </Row>
       </Container>
+      <AppModal isVisible={isVisible} hideModal={toggleModal} />
     </>
   )
 
